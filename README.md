@@ -69,7 +69,7 @@ requirements that will lead to a winning solution. -->
 
 We want to be able to set and get some private data in a smart contract in Solidity.
 
-## 💡 Roadmap for development  <a name = "roadmap"></a>
+##  Roadmap for development  <a name = "roadmap"></a>
 
 
 Steps before implementation:
