@@ -8,13 +8,18 @@ app.get('/secret', (req, res) => {
     const {id,  signature} = req.body;    
     const {v,r,s} = signature;
 
+
+
+    
 	// "signature": {
 	// 	"v": 1, // bytes32
 	// 	"r": 2, //  bytes32
 	// 	"s": 1 //uint8
-		
 	// }
 	
+
+    // 
+
 
     // encrypt secret
 

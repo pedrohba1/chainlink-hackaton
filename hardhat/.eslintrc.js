@@ -15,7 +15,17 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+
   rules: {
+    "node/no-missing-import": [
+      "error",
+      {
+        allowModules: [],
+        resolvePaths: ["types"],
+        tryExtensions: [".ts", ".json", ".node", ".js"],
+      },
+    ],
+    "no-unused-expressions": 0,
     "node/no-unsupported-features/es-syntax": [
       "error",
       { ignores: ["modules"] },
