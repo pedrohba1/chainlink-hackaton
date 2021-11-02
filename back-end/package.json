@@ -1,0 +1,13 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "ecies-geth": "^1.6.0",
+    "ethereumjs-util": "^7.1.3",
+    "ethers": "^5.5.1",
+    "express": "^4.17.1",
+    "typescript": "^4.4.4"
+  }
+}
