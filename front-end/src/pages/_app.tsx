@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { QueryClientProvider } from 'react-query';
 import queryClient from '@api/queryClient';
 import MainLayout from '@layouts/MainLayout';
-
+import { MoralisProvider } from 'react-moralis';
 import GlobalStyle from '@styles/global';
 import theme from '../theme';
 
@@ -33,13 +33,18 @@ function MyApp({ Component, pageProps }) {
       </Head>
 
       <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
-            <BuildLayout />
-          </SnackbarProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <MoralisProvider
+        appId={process.env.APP_ID}
+        serverUrl={process.env.SERVER_URL}
+      >
+        <ThemeProvider theme={theme}>
+          <QueryClientProvider client={queryClient}>
+            <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+              <BuildLayout />
+            </SnackbarProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </MoralisProvider>
     </>
   );
 }

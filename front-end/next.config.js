@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     API: process.env.API,
-    TO_SEND: process.env.TO_SEND
-  },
+    APP_ID: process.env.APP_ID,
+    SERVER_URL: process.env.SERVER_URL
+  }
 };
