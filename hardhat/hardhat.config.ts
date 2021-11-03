@@ -43,6 +43,11 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
+  typechain: {
+    outDir: "types",
+    target: "ethers-v5",
+    alwaysGenerateOverloads: true, // should overloads with full signatures like deposit(uint256) be generated always, even if there are no overloads?
+  },
 };
 
 export default config;
