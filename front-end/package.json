@@ -3,19 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "husky install",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .tsx --ext .ts ./",
-    "storybook": "start-storybook -s public -p 6006",
-    "build-storybook": "build-storybook",
     "commit": "cz"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   },
   "dependencies": {
     "@date-io/date-fns": "1.x",
@@ -27,14 +19,16 @@
     "@unform/web": "^2.1.6",
     "axios": "^0.21.1",
     "jwt-decode": "^3.1.2",
+    "moralis": "^0.0.120",
     "next": "10.0.6",
     "nookies": "^2.5.2",
     "notistack": "^1.0.9",
     "polished": "^4.1.2",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-input-mask": "^2.0.4",
+    "react-moralis": "^0.2.8",
     "react-query": "^3.16.0",
     "react-scrollbars-custom": "^4.0.25",
     "react-select": "^4.3.1",
@@ -46,11 +40,6 @@
     "@babel/core": "^7.13.16",
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
-    "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-links": "^6.2.9",
-    "@storybook/preset-scss": "^1.0.3",
-    "@storybook/react": "^6.2.9",
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.1",
     "@types/react-select": "^4.0.17",
@@ -71,13 +60,9 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
-    "msw": "^0.28.2",
-    "msw-storybook-addon": "^1.1.0",
     "prettier": "^2.2.1",
     "sass-loader": "^10.1.1",
-    "storybook-addon-next-router": "^2.0.4",
     "style-loader": "^2.0.0",
     "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^4.1.3"
@@ -86,8 +71,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "msw": {
-    "workerDirectory": "storybook-static"
   }
 }
