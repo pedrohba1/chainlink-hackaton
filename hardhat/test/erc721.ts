@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Article } from "../types";
 
 describe("Collectible", function () {
   let article;
@@ -15,7 +14,5 @@ describe("Collectible", function () {
     expect(article).to.not.be.undefined;
   });
 
-  it("Should mint", async function () {
-
-  });
+  it("Should mint", async function () {});
 });

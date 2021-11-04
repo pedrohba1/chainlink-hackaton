@@ -1,7 +1,8 @@
 {
   "scripts": {
     "prettier": "prettier --write contracts/**/*.sol",
-    "lint": "solhint --fix contracts/**/*.sol"
+    "lint": "solhint --fix contracts/**/*.sol",
+    "test": "hardhat test"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
