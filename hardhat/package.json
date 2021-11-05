@@ -30,6 +30,7 @@
     "ethers": "^5.0.0",
     "hardhat": "^2.6.7",
     "hardhat-gas-reporter": "^1.0.4",
+    "nft.storage": "^3.3.0",
     "prettier": "^2.3.2",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
     "solhint": "^3.3.6",
@@ -38,5 +39,9 @@
     "typechain": "^5.1.2",
     "typescript": "^4.3.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "-": "^0.0.1",
+    "D": "^1.0.0",
+    "files-from-path": "^0.2.1"
+  }
 }
