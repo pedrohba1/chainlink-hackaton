@@ -20,5 +20,6 @@ contract Articles is ERC1155 {
     function createCollectible(uint256 amount, string memory _uri ) public {
     _mint(msg.sender, articleIds, amount, "");
     _uris[articleIds] = _uri;
+    articleIds +=1;
     }
 }

@@ -13,6 +13,9 @@ describe("Article ERC1155", function () {
   });
 
   it("Wallet should be able to mint", async () => {
-    await articles.createCollectible(10, "some URI idk");
+    await articles.createCollectible(
+      10,
+      "ipfs://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni/metadata.json"
+    );
   });
 });
