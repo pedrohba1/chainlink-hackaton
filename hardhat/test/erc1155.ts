@@ -12,10 +12,33 @@ describe("Article ERC1155", function () {
     expect(articles).to.not.be.undefined;
   });
 
-  it("Wallet should be able to mint", async () => {
-    await articles.createCollectible(
-      10,
-      "ipfs://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni/metadata.json"
-    );
+  it("should be able to mint some NFTs with an URI", async () => {
+    const [owner] = await ethers.getSigners();
+    await articles
+      .connect(owner)
+      .createCollectible(
+        10,
+        "ipfs://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni/metadata.json"
+      );
+    await articles
+      .connect(owner)
+      .createCollectible(
+        100,
+        "ipfs://bafyreibw75mqtwztq52fnbvdmsf2dvpw5g2jwyg47wl3n3e6zz5nk46dkm/metadata.json"
+      );
+  });
+
+  it("owner should be able to check all the NFTs that he owns", async () => {
+    const [owner] = await ethers.getSigners();
+    const lastId = await articles.lastId();
+
+    const ids = Array.from({ length: lastId.toNumber() }, (v, k) => k);
+    const balances = [];
+    for (let i = 0; i < ids.length; i++)
+      balances.push(
+        (await articles.balanceOf(owner.address, ids[i])).toNumber()
+      );
+
+    expect(balances).deep.equal([10, 100]);
   });
 });
