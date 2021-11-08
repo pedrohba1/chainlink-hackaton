@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
+import useCreateCollectible from '@hooks/chain/useCreateCollectible';
+import useQueryCollectibles from '@hooks/chain/useQueryCollectibles';
 
 export default function Home() {
   const {
@@ -10,6 +12,9 @@ export default function Home() {
     logout,
     isAuthenticating
   } = useMoralis();
+
+  const { mutate } = useCreateCollectible();
+  const { data, status } = useQueryCollectibles();
 
   useEffect(() => {
     if (isAuthenticated) enableWeb3();
@@ -30,6 +35,13 @@ export default function Home() {
       <button onClick={handleAuth} type="button" disabled={isAuthenticating}>
         {!isWeb3Enabled || !isAuthenticated ? 'logar com metamask' : 'logout'}
       </button>
+      <button onClick={() => mutate} type="button">
+        create collectible
+      </button>
+      <p>
+        {data?.balance}
+        {data?.uri}
+      </p>
     </>
   );
 }
