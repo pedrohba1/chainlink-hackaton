@@ -35,7 +35,7 @@ export default function Home() {
       <button onClick={handleAuth} type="button" disabled={isAuthenticating}>
         {!isWeb3Enabled || !isAuthenticated ? 'logar com metamask' : 'logout'}
       </button>
-      <button onClick={() => mutate} type="button">
+      <button onClick={() => mutate()} type="button">
         create collectible
       </button>
       <p>

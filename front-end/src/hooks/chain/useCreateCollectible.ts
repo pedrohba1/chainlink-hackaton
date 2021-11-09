@@ -19,7 +19,8 @@ export default function useCreateCollectible() {
 
   return useMutation(
     async () => {
-      const res = await Moralis.executeFunction(options);
+      const res = await Moralis.Web3.executeFunction(options);
+      console.log(res);
     },
 
     {

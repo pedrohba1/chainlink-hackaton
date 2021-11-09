@@ -17,12 +17,12 @@ export default function useQueryCollectibles() {
         id: '0'
       }
     };
-    const balance = await Moralis.executeFunction(options);
-    const uri = await Moralis.executeFunction({
+    const balance = await Moralis.Web3.executeFunction(options);
+    const uri = await Moralis.Web3.executeFunction({
       ...options,
       functionName: 'uri',
       params: {
-        tokenId: '0'
+        tokenId: '2'
       }
     });
 
