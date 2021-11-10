@@ -9,7 +9,7 @@ export default function useQueryCollectibles() {
   const query = async () => {
     console.log('aqui');
     const options = {
-      contractAddress: '0x415C1b8122E913958003E6ab1A1c4b7A22472f9F',
+      contractAddress: process.env.CONTRACT_ADDRESS,
       functionName: 'balanceOf',
       abi,
       params: {
@@ -22,12 +22,22 @@ export default function useQueryCollectibles() {
       ...options,
       functionName: 'uri',
       params: {
-        tokenId: '2'
+        tokenId: '0'
       }
     });
 
+    const lastId = await Moralis.Web3.executeFunction({
+      ...options,
+      functionName: 'lastId'
+    });
+    console.log(lastId);
+
     console.log(balance);
     console.log(uri);
+    const ipfsData = await fetch(
+      'https://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni.ipfs.dweb.link/metadata.json'
+    );
+    console.log(await ipfsData.json());
 
     return { balance, uri };
   };
