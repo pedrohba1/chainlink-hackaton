@@ -18,7 +18,7 @@ export default function useQueryCollectibles() {
     });
 
     const uris = [];
-    for (let i = 0; i <= lastId; i += 1) {
+    for (let i = 0; i < lastId; i += 1) {
       const uri = Moralis.Web3.executeFunction({
         ...options,
         functionName: 'uri',
@@ -28,29 +28,22 @@ export default function useQueryCollectibles() {
       });
       uris.push(uri);
     }
-    let results = await Promise.all(uris);
-    results = results.map((r: string) => {
+
+    let urls = await Promise.all(uris);
+    urls = urls.map((r: string) => {
       return r
         .replace('ipfs', 'https')
         .replace('/metadata.json', '.ipfs.dweb.link/metadata.json');
     });
 
-    let fetches = [];
-    for (let i = 0; i <= lastId; i += 1) {
-      const toFetch = fetch(results[i]);
-      fetches.push(toFetch);
-    }
+    const arrayOfData = await Promise.all(
+      urls.map(async (url) => {
+        const resp = await (await fetch(url)).json();
+        return resp;
+      })
+    );
 
-    fetches = await Promise.all(fetches);
-
-    const arrayOfData = [];
-    for (let i = 0; i <= lastId; i += 1) {
-      arrayOfData.push(fetches[i].json());
-    }
-
-    const finalResults = await Promise.all(arrayOfData);
-    console.log('final results', await finalResults);
-    return { uris: results };
+    return { uris: arrayOfData };
   };
 
   return useQuery(['get/collectibles'], () => query());

@@ -43,7 +43,9 @@ export default function Home() {
         data?.uris.map((uri, indx) => (
           <p key={indx}>
             {uri?.name}
+            <br />
             {uri?.description}
+            <br />
             {uri?.image}
           </p>
         ))}
