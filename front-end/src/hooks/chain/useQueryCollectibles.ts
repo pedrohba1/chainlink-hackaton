@@ -7,39 +7,50 @@ export default function useQueryCollectibles() {
   const { abi } = Articles;
 
   const query = async () => {
-    console.log('aqui');
     const options = {
       contractAddress: process.env.CONTRACT_ADDRESS,
-      functionName: 'balanceOf',
-      abi,
-      params: {
-        account: '0xc6Ff58B90319685cc77B698Afde9Ee2ef3389c95',
-        id: '0'
-      }
+      abi
     };
-    const balance = await Moralis.Web3.executeFunction(options);
-    const uri = await Moralis.Web3.executeFunction({
-      ...options,
-      functionName: 'uri',
-      params: {
-        tokenId: '0'
-      }
-    });
 
     const lastId = await Moralis.Web3.executeFunction({
       ...options,
       functionName: 'lastId'
     });
-    console.log(lastId);
 
-    console.log(balance);
-    console.log(uri);
-    const ipfsData = await fetch(
-      'https://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni.ipfs.dweb.link/metadata.json'
-    );
-    console.log(await ipfsData.json());
+    const uris = [];
+    for (let i = 0; i <= lastId; i += 1) {
+      const uri = Moralis.Web3.executeFunction({
+        ...options,
+        functionName: 'uri',
+        params: {
+          tokenId: String(i)
+        }
+      });
+      uris.push(uri);
+    }
+    let results = await Promise.all(uris);
+    results = results.map((r: string) => {
+      return r
+        .replace('ipfs', 'https')
+        .replace('/metadata.json', '.ipfs.dweb.link/metadata.json');
+    });
 
-    return { balance, uri };
+    let fetches = [];
+    for (let i = 0; i <= lastId; i += 1) {
+      const toFetch = fetch(results[i]);
+      fetches.push(toFetch);
+    }
+
+    fetches = await Promise.all(fetches);
+
+    const arrayOfData = [];
+    for (let i = 0; i <= lastId; i += 1) {
+      arrayOfData.push(fetches[i].json());
+    }
+
+    const finalResults = await Promise.all(arrayOfData);
+    console.log('final results', await finalResults);
+    return { uris: results };
   };
 
   return useQuery(['get/collectibles'], () => query());

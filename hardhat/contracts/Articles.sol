@@ -22,3 +22,5 @@ contract Articles is ERC1155 {
         lastId += 1;
     }
 }
+
+

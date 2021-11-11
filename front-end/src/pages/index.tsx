@@ -14,7 +14,7 @@ export default function Home() {
   } = useMoralis();
 
   const { mutate } = useCreateCollectible();
-  const { data, status } = useQueryCollectibles();
+  const { data, isLoading } = useQueryCollectibles();
 
   useEffect(() => {
     if (isAuthenticated) enableWeb3();
@@ -38,10 +38,15 @@ export default function Home() {
       <button onClick={() => mutate()} type="button">
         create collectible
       </button>
-      <p>
-        {data?.balance}
-        {data?.uri}
-      </p>
+
+      {!isLoading &&
+        data?.uris.map((uri, indx) => (
+          <p key={indx}>
+            {uri?.name}
+            {uri?.description}
+            {uri?.image}
+          </p>
+        ))}
     </>
   );
 }
