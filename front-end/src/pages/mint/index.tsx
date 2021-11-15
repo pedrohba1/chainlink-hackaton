@@ -3,17 +3,19 @@ import {
   Button,
   Typography,
   Paper,
-  Container,
   TextField,
   FormControl
 } from '@material-ui/core';
 
+import useCreateCollectible from '@hooks/chain/useCreateCollectible';
+
 export default function Mint() {
   const [image, setImage] = useState();
-
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [preview, setPreview] = useState('');
+  const { mutate } = useCreateCollectible();
 
-  // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!image) {
       setPreview(undefined);
@@ -29,6 +31,14 @@ export default function Mint() {
     console.log(event.target.files[0]);
   };
 
+  const callMint = () => {
+    mutate({
+      name,
+      description,
+      image
+    });
+  };
+
   return (
     <FormControl>
       <Typography variant="h4"> Mint a new article as a NFT</Typography>
@@ -37,6 +47,8 @@ export default function Mint() {
         id="standard-multiline-flexible"
         label="name"
         margin="normal"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <TextField
         margin="normal"
@@ -45,6 +57,8 @@ export default function Mint() {
         multiline
         id="standard-multiline-flexible"
         label="abstract"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
 
       <Button variant="contained" component="label">
@@ -52,6 +66,10 @@ export default function Mint() {
         <input onChange={selectFile} type="file" hidden />
       </Button>
       <Paper>{preview && <img src={preview} alt="article" />}</Paper>
+
+      <Button variant="text" onClick={callMint}>
+        Mint NFT!
+      </Button>
     </FormControl>
   );
 }
