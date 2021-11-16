@@ -1,6 +1,8 @@
 import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
 import Articles from 'src/contracts/Articles.json';
+import axiosInstance from '@api/axios';
+import axios from 'axios';
 
 export default function useQueryCollectibles() {
   const { Moralis } = useMoralis();
@@ -30,18 +32,23 @@ export default function useQueryCollectibles() {
     }
 
     let urls = await Promise.all(uris);
+    console.log(urls);
     urls = urls.map((r: string) => {
-      return r
-        .replace('ipfs', 'https')
-        .replace('/metadata.json', '.ipfs.dweb.link/metadata.json');
+      const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
+      console.log('hashes', ipfsHash);
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}/metadata.json`;
     });
 
-    const arrayOfData = await Promise.all(
+    console.log(urls);
+    const arrayOfData = await Promise.allSettled(
       urls.map(async (url) => {
-        const resp = await (await fetch(url)).json();
+        console.log(url);
+        const resp = await axiosInstance.get(url);
+        console.log(resp);
         return resp;
       })
     );
+    console.log(arrayOfData);
 
     return { uris: arrayOfData };
   };

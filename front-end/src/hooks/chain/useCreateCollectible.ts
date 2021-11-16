@@ -2,7 +2,6 @@ import { useMutation } from 'react-query';
 import { useSnackbar } from 'notistack';
 import { useMoralis } from 'react-moralis';
 import Articles from 'src/contracts/Articles.json';
-import axiosInstance from '@api/axios';
 
 export default function useCreateCollectible() {
   const { enqueueSnackbar } = useSnackbar();
@@ -10,30 +9,41 @@ export default function useCreateCollectible() {
   const { abi } = Articles;
   const options = {
     contractAddress: '0x415C1b8122E913958003E6ab1A1c4b7A22472f9F',
-    functionName: 'lastId',
     abi
   };
 
   return useMutation(
     async (data: any) => {
       const { name, description, image } = data;
-      const res = await Moralis.Web3.executeFunction(options);
+      const res = await Moralis.Web3.executeFunction({
+        ...options,
+        functionName: 'lastId'
+      });
 
       // upload image first:
       const imageFile = new Moralis.File(image.name, image);
       await imageFile.saveIPFS();
-      const imageURL = imageFile.ipfs();
+      const imageURL = `ipfs://${(imageFile as any).hash()}`;
+
+      console.log('imageURL', imageURL);
 
       // then upĺoad uri metadata
-
       const jsonFile = new Moralis.File('file.json', {
         base64: btoa(JSON.stringify({ name, description, image: imageURL }))
       });
 
-      const ipfsJsonLink = await jsonFile.saveIPFS();
-      console.log('json link', ipfsJsonLink);
-      console.log('result do ', jsonFile);
-      console.log(jsonFile.url);
+      await jsonFile.saveIPFS();
+      const jsonIpfsLink = `ipfs://${(jsonFile as any).hash()}`;
+      console.log('json no ipfs', jsonIpfsLink);
+
+      await Moralis.Web3.executeFunction({
+        ...options,
+        functionName: 'createCollectible',
+        params: {
+          amount: '10',
+          _uri: jsonIpfsLink
+        }
+      });
     },
 
     {
