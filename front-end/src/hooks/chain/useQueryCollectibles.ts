@@ -8,7 +8,7 @@ export default function useQueryCollectibles() {
 
   const query = async () => {
     const options = {
-      contractAddress: process.env.CONTRACT_ADDRESS,
+      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
       abi
     };
 

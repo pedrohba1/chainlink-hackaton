@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 import { useSnackbar } from 'notistack';
 import { useMoralis } from 'react-moralis';
 import Articles from 'src/contracts/Articles.json';
+import axiosInstance from '@api/axios';
 
 export default function useCreateCollectible() {
   const { enqueueSnackbar } = useSnackbar();
@@ -9,19 +10,16 @@ export default function useCreateCollectible() {
   const { abi } = Articles;
   const options = {
     contractAddress: '0x415C1b8122E913958003E6ab1A1c4b7A22472f9F',
-    functionName: 'createCollectible',
-    abi,
-    params: {
-      amount: 30,
-      _uri: 'ipfs://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni/metadata.json'
-    }
+    functionName: 'lastId',
+    abi
   };
 
   return useMutation(
     async (data: any) => {
+      const res = await Moralis.Web3.executeFunction(options);
+      console.log(res);
+      const result = await axiosInstance.post('api/mint');
       console.log('em mutation', data);
-      // const res = await Moralis.Web3.executeFunction(options);
-      // console.log(res);
     },
 
     {

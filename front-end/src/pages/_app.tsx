@@ -34,8 +34,8 @@ function MyApp({ Component, pageProps }) {
 
       <GlobalStyle />
       <MoralisProvider
-        appId={process.env.APP_ID}
-        serverUrl={process.env.SERVER_URL}
+        appId={process.env.NEXT_PUBLIC_APP_ID}
+        serverUrl={process.env.NEXT_PUBLIC_SERVER_URL}
       >
         <ThemeProvider theme={theme}>
           <QueryClientProvider client={queryClient}>

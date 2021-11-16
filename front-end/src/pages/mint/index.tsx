@@ -35,6 +35,10 @@ export default function Mint() {
   return (
     <FormControl>
       <Typography variant="h4"> Mint a new article as a NFT</Typography>
+      <Typography>
+        First, the content of the article will be uploaded as an URI and after
+        that it will call a function of the ERC1155 to mint this collectible
+      </Typography>
 
       <TextField
         id="standard-multiline-flexible"
