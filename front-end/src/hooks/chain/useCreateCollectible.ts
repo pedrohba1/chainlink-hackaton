@@ -16,10 +16,24 @@ export default function useCreateCollectible() {
 
   return useMutation(
     async (data: any) => {
+      const { name, description, image } = data;
       const res = await Moralis.Web3.executeFunction(options);
-      console.log(data);
-      const result = await axiosInstance.post('api/mint', { ...data });
-      console.log('result do ', result);
+
+      // upload image first:
+      const imageFile = new Moralis.File(image.name, image);
+      await imageFile.saveIPFS();
+      const imageURL = imageFile.ipfs();
+
+      // then upĺoad uri metadata
+
+      const jsonFile = new Moralis.File('file.json', {
+        base64: btoa(JSON.stringify({ name, description, image: imageURL }))
+      });
+
+      const ipfsJsonLink = await jsonFile.saveIPFS();
+      console.log('json link', ipfsJsonLink);
+      console.log('result do ', jsonFile);
+      console.log(jsonFile.url);
     },
 
     {

@@ -1,20 +1,24 @@
-import { NFTStorage } from 'nft.storage';
+import { useMoralis } from 'react-moralis';
 
-const client = new NFTStorage({
-  token: String(process.env.NFT_STORAGE_API_KEY)
-});
+// const pinataSDK = require('@pinata/sdk');
+
+// const pinata = pinataSDK(
+//   process.env.PINATA_API_KEY,
+//   process.env.PINATA_APP_SECRET
+// );
 
 export default async function mint(req, res) {
   if (req.method === 'POST') {
     try {
-      console.log(req.body);
       const { name, description, image } = req.body;
-      const metadata = await client.store({
-        name,
-        description,
-        image
-      });
-      res.status(200).json({ url: metadata.url });
+
+      // const isAuth = pinata.testAuthentication();
+      // if (isAuth) {
+      //   const result = pinata.pinJSONToIPFS(req.body);
+      //   res.status(200).json(result);
+      // } else {
+      //   res.status(400).json({ message: 'pinata failed to auth' });
+      // }
     } catch (e) {
       res.status(400).json(e);
     }
