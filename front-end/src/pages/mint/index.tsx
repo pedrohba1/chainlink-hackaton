@@ -1,5 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Button, Typography, TextField, FormControl } from '@material-ui/core';
+import {
+  Button,
+  Typography,
+  TextField,
+  FormControl,
+  CircularProgress
+} from '@material-ui/core';
 
 import useCreateCollectible from '@hooks/chain/useCreateCollectible';
 
@@ -8,7 +14,7 @@ export default function Mint() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [preview, setPreview] = useState('');
-  const { mutate } = useCreateCollectible();
+  const { mutate, isLoading } = useCreateCollectible();
 
   useEffect(() => {
     if (!image) {
@@ -80,9 +86,22 @@ export default function Mint() {
         )}
       </div>
 
-      <Button variant="text" onClick={callMint}>
-        Mint NFT!
-      </Button>
+      <div
+        style={{
+          marginTop: '2rem',
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'center'
+        }}
+      >
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <Button variant="outlined" onClick={callMint}>
+            Mint NFT!
+          </Button>
+        )}
+      </div>
     </FormControl>
   );
 }

@@ -15,17 +15,11 @@ export default function useCreateCollectible() {
   return useMutation(
     async (data: any) => {
       const { name, description, image } = data;
-      const res = await Moralis.Web3.executeFunction({
-        ...options,
-        functionName: 'lastId'
-      });
 
       // upload image first:
       const imageFile = new Moralis.File(image.name, image);
       await imageFile.saveIPFS();
       const imageURL = `ipfs://${(imageFile as any).hash()}`;
-
-      console.log('imageURL', imageURL);
 
       // then upĺoad uri metadata
       const jsonFile = new Moralis.File('file.json', {
@@ -34,7 +28,6 @@ export default function useCreateCollectible() {
 
       await jsonFile.saveIPFS();
       const jsonIpfsLink = `ipfs://${(jsonFile as any).hash()}`;
-      console.log('json no ipfs', jsonIpfsLink);
 
       await Moralis.Web3.executeFunction({
         ...options,
