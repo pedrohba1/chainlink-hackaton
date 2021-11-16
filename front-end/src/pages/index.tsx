@@ -9,14 +9,8 @@ export default function Home() {
 
   return (
     <>
-      <p> front basicão</p>
-
-      <button onClick={() => mutate()} type="button">
-        create collectible
-      </button>
-
       {!isLoading &&
-        data?.uris.map((uri, indx) => (
+        data?.nfts.map((uri, indx) => (
           <p key={indx}>
             {uri?.name}
             <br />

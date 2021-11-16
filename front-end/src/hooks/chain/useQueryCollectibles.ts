@@ -2,7 +2,26 @@ import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
 import Articles from 'src/contracts/Articles.json';
 import axiosInstance from '@api/axios';
-import axios from 'axios';
+
+interface NftType {
+  name: string;
+  description: string;
+  image: string;
+}
+
+interface PromiseFulfilledResult<T> {
+  status: 'fulfilled';
+  value: T;
+}
+
+interface PromiseRejectedResult {
+  status: 'rejected';
+  reason: any;
+}
+
+type PromiseSettledResult<T> =
+  | PromiseFulfilledResult<T>
+  | PromiseRejectedResult;
 
 export default function useQueryCollectibles() {
   const { Moralis } = useMoralis();
@@ -32,25 +51,26 @@ export default function useQueryCollectibles() {
     }
 
     let urls = await Promise.all(uris);
-    console.log(urls);
     urls = urls.map((r: string) => {
       const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
-      console.log('hashes', ipfsHash);
-      return `https://gateway.ipfs.io/ipfs/${ipfsHash}/metadata.json`;
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
     });
+    console.log(urls[4]);
 
-    console.log(urls);
-    const arrayOfData = await Promise.allSettled(
+    const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
       urls.map(async (url) => {
-        console.log(url);
         const resp = await axiosInstance.get(url);
-        console.log(resp);
-        return resp;
+        return resp.data;
       })
     );
-    console.log(arrayOfData);
 
-    return { uris: arrayOfData };
+    const nfts = resolvedPromises
+      .filter(({ status }) => status === 'fulfilled')
+      .map((p) => (p as PromiseFulfilledResult<NftType>).value as NftType);
+
+    console.log(nfts);
+
+    return { nfts };
   };
 
   return useQuery(['get/collectibles'], () => query());
