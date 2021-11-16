@@ -17,9 +17,9 @@ export default function useCreateCollectible() {
   return useMutation(
     async (data: any) => {
       const res = await Moralis.Web3.executeFunction(options);
-      console.log(res);
-      const result = await axiosInstance.post('api/mint');
-      console.log('em mutation', data);
+      console.log(data);
+      const result = await axiosInstance.post('api/mint', { ...data });
+      console.log('result do ', result);
     },
 
     {

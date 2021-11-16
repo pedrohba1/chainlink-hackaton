@@ -21,6 +21,7 @@
     "jwt-decode": "^3.1.2",
     "moralis": "^0.0.120",
     "next": "10.0.6",
+    "nft.storage": "^3.4.0",
     "nookies": "^2.5.2",
     "notistack": "^1.0.9",
     "polished": "^4.1.2",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
+    "@babel/preset-env": "^7.16.0",
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
     "@types/node": "^14.14.22",
