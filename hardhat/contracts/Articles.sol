@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 import "hardhat/console.sol";
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
-contract Articles is ERC1155 {
+contract Articles is ERC1155Supply {
     mapping(uint256 => string) private _uris;
     uint256 public lastId;
 

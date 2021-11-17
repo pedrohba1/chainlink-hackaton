@@ -41,4 +41,9 @@ describe("Article ERC1155", function () {
 
     expect(balances).deep.equal([10, 100]);
   });
+
+  it("should be able to check total supply of a token", async () => {
+    const totalBalance = await articles.totalSupply(0);
+    expect(totalBalance).to.be.equal(10);
+  });
 });
