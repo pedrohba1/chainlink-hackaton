@@ -48,6 +48,9 @@ export default function Header() {
             <Button onClick={() => router.push('/')} color="inherit">
               view all
             </Button>
+            <Button onClick={() => router.push('/mine')} color="inherit">
+              my articles
+            </Button>
           </Typography>
 
           <Button
