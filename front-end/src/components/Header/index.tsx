@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import useStyles from './styles';
 
@@ -45,6 +44,9 @@ export default function Header() {
           <Typography variant="h6" className={classes.buttons}>
             <Button onClick={() => router.push('/mint')} color="inherit">
               mint article
+            </Button>
+            <Button onClick={() => router.push('/')} color="inherit">
+              view all
             </Button>
           </Typography>
 

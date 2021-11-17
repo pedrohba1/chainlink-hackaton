@@ -14,15 +14,6 @@ interface PromiseFulfilledResult<T> {
   value: T;
 }
 
-interface PromiseRejectedResult {
-  status: 'rejected';
-  reason: any;
-}
-
-type PromiseSettledResult<T> =
-  | PromiseFulfilledResult<T>
-  | PromiseRejectedResult;
-
 export default function useQueryCollectibles() {
   const { Moralis } = useMoralis();
   const { abi } = Articles;
@@ -55,20 +46,27 @@ export default function useQueryCollectibles() {
       const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
       return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
     });
-    console.log(urls[4]);
-
     const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
       urls.map(async (url) => {
         const resp = await axiosInstance.get(url);
         return resp.data;
       })
     );
-
     const nfts = resolvedPromises
       .filter(({ status }) => status === 'fulfilled')
-      .map((p) => (p as PromiseFulfilledResult<NftType>).value as NftType);
-
-    console.log(nfts);
+      .map((p) => {
+        const rp = p as PromiseFulfilledResult<NftType>;
+        if (rp.value !== undefined) {
+          const {
+            value: { image }
+          } = rp;
+          const imgIpfsHash = image.replace('ipfs://', '');
+          rp.value.image = `https://gateway.ipfs.io/ipfs/${imgIpfsHash}`;
+          return rp.value as NftType;
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
 
     return { nfts };
   };
