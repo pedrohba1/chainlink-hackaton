@@ -10,6 +10,7 @@ describe("Article ERC1155", function () {
     articles = await Articles.deploy();
     await articles.deployed();
     expect(articles).to.not.be.undefined;
+    expect((await articles.getLatestId()).toString()).to.be.equal("0");
   });
 
   it("should be able to mint some NFTs with an URI", async () => {
@@ -30,7 +31,7 @@ describe("Article ERC1155", function () {
 
   it("owner should be able to check all the NFTs that he owns", async () => {
     const [owner] = await ethers.getSigners();
-    const lastId = await articles.lastId();
+    const lastId = await articles.getLatestId();
 
     const ids = Array.from({ length: lastId.toNumber() }, (v, k) => k);
     const balances = [];

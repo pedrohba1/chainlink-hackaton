@@ -3,15 +3,15 @@
 pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract Articles is ERC1155Supply {
+    using Counters for Counters.Counter;
+    Counters.Counter private lastId;
     mapping(uint256 => string) private _uris;
     mapping(uint256 => address) public creators;
-    uint256 public lastId;
 
-    constructor() ERC1155("Articles") {
-        lastId = 0;
-    }
+    constructor() ERC1155("Articles") {}
 
     function uri(uint256 tokenId) public view override returns (string memory) {
         return (_uris[tokenId]);
@@ -31,10 +31,10 @@ contract Articles is ERC1155Supply {
      * @param _uri URI for this token
      */
     function create(uint256 _initialSupply, string memory _uri) public {
-        _uris[lastId] = _uri;
-        creators[lastId] = msg.sender;
-        _mint(msg.sender, lastId, _initialSupply, "");
-        lastId += 1;
+        _uris[lastId.current()] = _uri;
+        creators[lastId.current()] = msg.sender;
+        _mint(msg.sender, lastId.current(), _initialSupply, "");
+        lastId.increment();
     }
 
     /**
@@ -47,5 +47,13 @@ contract Articles is ERC1155Supply {
         creatorOnly(_id)
     {
         _mint(msg.sender, _id, _aditionalSupply, "");
+    }
+
+
+    /**
+     * @dev returns the latest Id
+     */
+    function getLatestId() public view returns (uint256)  {
+        return lastId.current();
     }
 }
