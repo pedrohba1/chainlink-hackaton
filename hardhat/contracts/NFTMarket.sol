@@ -67,4 +67,9 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
             payable(msg.sender)
         );
     }
+
+
+    function getLatestItemId () public view returns (uint256) {
+        return latestItemId.current();
+    }
 }
