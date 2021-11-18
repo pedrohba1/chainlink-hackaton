@@ -11,7 +11,6 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
     mapping(uint256 => MarketItem) private marketItems;
 
     struct MarketItem {
-        uint256 itemId;
         uint256 tokenId;
         uint256 price;
         uint256 amount;
@@ -21,7 +20,7 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
         bool exists;
     }
 
-    event SelOrderCreated(
+    event SellOrderCreated(
         uint256 indexed itemId,
         uint256 indexed tokenId,
         uint256 price,
@@ -29,6 +28,11 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
         address indexed nftContract,
         address seller
     );
+
+    event SouldOut (
+        uint256 indexed itemId
+    );
+
 
     constructor() {}
 
@@ -57,7 +61,6 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
         );
 
         marketItems[latestItemId.current()] = MarketItem(
-            latestItemId.current(),
             _tokenId,
             _price,
             _amount,
@@ -67,7 +70,7 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
             true
         );
 
-        emit SelOrderCreated(
+        emit SellOrderCreated(
             latestItemId.current(),
             _tokenId,
             _price,
@@ -106,6 +109,7 @@ contract NFTMarket is ReentrancyGuard, ERC1155Holder {
         marketItems[_itemId].amount -= _amount;
         if (marketItems[_itemId].amount == 0) {
             marketItems[_itemId].soldOut = true;
+            emit SouldOut(_itemId);
         }
     }
 
