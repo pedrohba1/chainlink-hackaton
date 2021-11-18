@@ -6,6 +6,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import axiosInstance from '@api/axios';
+
+import { useMoralis } from 'react-moralis';
 
 const useStyles = makeStyles({
   root: {
@@ -15,6 +18,19 @@ const useStyles = makeStyles({
 
 export default function OwnedCard({ name, description, image, balance }) {
   const classes = useStyles();
+  const { web3 } = useMoralis();
+
+  const signAndRequest = async () => {
+    const [current] = await web3.eth.getAccounts();
+    console.log(current);
+    const signed = await web3.eth.personal.sign(
+      'Message to request restricted data',
+      current,
+      ''
+    );
+    axiosInstance.post('api/private', { signed });
+    console.log(signed);
+  };
 
   return (
     <Card className={classes.root}>
@@ -37,7 +53,7 @@ export default function OwnedCard({ name, description, image, balance }) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={() => signAndRequest()}>
           View restricted content
         </Button>
         <Typography variant="body2" color="textSecondary" component="p">
