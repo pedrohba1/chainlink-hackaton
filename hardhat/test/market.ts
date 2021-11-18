@@ -49,8 +49,15 @@ describe("Article Marketplace", function () {
     await articles.connect(owner).setApprovalForAll(market.address, true);
     await market
       .connect(owner)
-      .sell(articles.address, "0", ethers.BigNumber.from(1), 1);
+      .sell(articles.address, "0", ethers.BigNumber.from(10), 1);
     const balance = await articles.balanceOf(owner.address, "0");
     expect(balance.toString()).to.be.equal("9");
+  });
+
+  it("wallet should be able to buy some of the nfts", async () => {
+    const [owner, addr2] = await ethers.getSigners();
+    await market.connect(addr2).buy("0", "1", { value: 10 });
+    const balance = await articles.balanceOf(addr2.address, "0");
+    expect(balance.toString()).to.be.equal("1");
   });
 });
