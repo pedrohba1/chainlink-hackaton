@@ -1,16 +1,12 @@
+import { ethers } from 'ethers';
+
 export default async function mint(req, res) {
   if (req.method === 'POST') {
     try {
-      console.log(req.body);
-
-      // const isAuth = pinata.testAuthentication();
-      // if (isAuth) {
-      //   const result = pinata.pinJSONToIPFS(req.body);
-      //   res.status(200).json(result);
-      // } else {
-      //   res.status(400).json({ message: 'pinata failed to auth' });
-      // }
-      res.status(200).json(req.body);
+      const { message, signed } = req.body;
+      const result = ethers.utils.verifyMessage(message, signed);
+      console.log(result);
+      res.status(200).json({ signer: result });
     } catch (e) {
       res.status(400).json(e);
     }

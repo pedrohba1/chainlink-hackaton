@@ -22,14 +22,9 @@ export default function OwnedCard({ name, description, image, balance }) {
 
   const signAndRequest = async () => {
     const [current] = await web3.eth.getAccounts();
-    console.log(current);
-    const signed = await web3.eth.personal.sign(
-      'Message to request restricted data',
-      current,
-      ''
-    );
-    axiosInstance.post('api/private', { signed });
-    console.log(signed);
+    const message = 'Message to request restricted data';
+    const signed = await web3.eth.personal.sign(message, current, '');
+    axiosInstance.post('api/private', { message, signed });
   };
 
   return (
