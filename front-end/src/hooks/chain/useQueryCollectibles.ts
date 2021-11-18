@@ -16,6 +16,7 @@ interface PromiseFulfilledResult<T> {
 
 export default function useQueryCollectibles() {
   const { Moralis } = useMoralis();
+  (Moralis as any).enableWeb3();
   const { abi } = Articles;
 
   const query = async () => {
