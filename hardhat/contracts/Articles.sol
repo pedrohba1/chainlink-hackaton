@@ -49,11 +49,10 @@ contract Articles is ERC1155Supply {
         _mint(msg.sender, _id, _aditionalSupply, "");
     }
 
-
     /**
      * @dev returns the latest Id
      */
-    function getLatestId() public view returns (uint256)  {
+    function getLatestId() public view returns (uint256) {
         return lastId.current();
     }
 }
