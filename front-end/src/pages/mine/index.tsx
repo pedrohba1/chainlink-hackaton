@@ -1,5 +1,5 @@
 import useQueryMineCollectibles from '@hooks/chain/useQueryMineCollectibles';
-import ImgMediaCard from '@components/Card';
+import OwnedCard from '@components/OwnerCard';
 import { Container, Grid } from '@material-ui/core';
 
 export default function Home() {
@@ -14,13 +14,13 @@ export default function Home() {
         justify="flex-start"
         alignItems="flex-start"
       >
-        {/* {!isLoading &&
+        {!isLoading &&
           data.nfts.map((nft, indx) => (
             // eslint-disable-next-line react/no-array-index-key
             <Grid key={indx} item xs={4}>
-              <ImgMediaCard {...nft} />
+              <OwnedCard {...nft} />
             </Grid>
-          ))} */}
+          ))}
       </Grid>
     </Container>
   );

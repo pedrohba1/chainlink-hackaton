@@ -1,18 +1,19 @@
 import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
 import Articles from 'src/contracts/Articles.json';
-// import axiosInstance from '@api/axios';
+import axiosInstance from '@api/axios';
 
-// interface NftType {
-//   name: string;
-//   description: string;
-//   image: string;
-// }
+interface NftType {
+  name: string;
+  description: string;
+  image: string;
+  balance: string;
+}
 
-// interface PromiseFulfilledResult<T> {
-//   status: 'fulfilled';
-//   value: T;
-// }
+interface PromiseFulfilledResult<T> {
+  status: 'fulfilled';
+  value: T;
+}
 
 export default function useQueryMineCollectibles() {
   const { Moralis } = useMoralis();
@@ -45,50 +46,53 @@ export default function useQueryMineCollectibles() {
       balances.push(balance);
     }
 
-    const resolvedBalances = await Promise.all(balances);
-    console.log(resolvedBalances);
+    const resolvedBalances = (await Promise.allSettled<Promise<any>[]>(
+      balances
+    )) as PromiseFulfilledResult<any>[];
 
-    // const uris = [];
-    // for (let i = 0; i < lastId; i += 1) {
-    //   const uri = Moralis.Web3.executeFunction({
-    //     ...options,
-    //     functionName: 'uri',
-    //     params: {
-    //       tokenId: String(i)
-    //     }
-    //   });
-    //   uris.push(uri);
-    // }
+    const uris = [];
+    for (let i = 0; i < lastId; i += 1) {
+      const uri = Moralis.Web3.executeFunction({
+        ...options,
+        functionName: 'uri',
+        params: {
+          tokenId: String(i)
+        }
+      });
+      uris.push(uri);
+    }
 
-    // let urls = await Promise.all(uris);
-    // urls = urls.map((r: string) => {
-    //   const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
-    //   return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
-    // });
-    // const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
-    //   urls.map(async (url) => {
-    //     const resp = await axiosInstance.get(url);
-    //     return resp.data;
-    //   })
-    // );
-    // const nfts = resolvedPromises
-    //   .filter(({ status }) => status === 'fulfilled')
-    //   .map((p) => {
-    //     const rp = p as PromiseFulfilledResult<NftType>;
-    //     if (rp.value !== undefined) {
-    //       const {
-    //         value: { image }
-    //       } = rp;
-    //       const imgIpfsHash = image.replace('ipfs://', '');
-    //       rp.value.image = `https://gateway.ipfs.io/ipfs/${imgIpfsHash}`;
-    //       return rp.value as NftType;
-    //     }
-    //     return null;
-    //   })
-    //   .filter((item) => item !== null);
+    let urls = await Promise.all(uris);
+    urls = urls.map((r: string) => {
+      const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
+    });
+    const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
+      urls.map(async (url) => {
+        const resp = await axiosInstance.get(url);
+        return resp.data;
+      })
+    );
 
-    // return { nfts };
-    return null;
+    const nfts = resolvedPromises
+      .filter(({ status }) => status === 'fulfilled')
+      .map((p, i) => {
+        const rp = p as PromiseFulfilledResult<NftType>;
+        if (rp.value !== undefined) {
+          const {
+            value: { image }
+          } = rp;
+          const imgIpfsHash = image.replace('ipfs://', '');
+          rp.value.image = `https://gateway.ipfs.io/ipfs/${imgIpfsHash}`;
+          rp.value.balance = resolvedBalances[i].value;
+          return rp.value as NftType;
+        }
+        return null;
+      })
+      .filter((item) => item !== null && item.balance !== '0');
+
+    console.log(nfts);
+    return { nfts };
   };
 
   return useQuery(['get/mine-collectibles'], () => query());
