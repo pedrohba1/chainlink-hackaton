@@ -21,7 +21,7 @@ export default function ImgMediaCard({ name, description, image }) {
       <CardActionArea>
         <CardMedia
           component="img"
-          alt="Contemplative Reptile"
+          alt="Article NFT Image"
           height="140"
           width="500"
           image={image}

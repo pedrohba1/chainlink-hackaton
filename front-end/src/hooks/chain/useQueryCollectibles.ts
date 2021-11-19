@@ -41,11 +41,12 @@ export default function useQueryCollectibles() {
       });
       uris.push(uri);
     }
-
     let urls = await Promise.all(uris);
+    console.log(urls);
+
     urls = urls.map((r: string) => {
-      const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
-      return `https://gateway.ipfs.io/ipfs/${ipfsHash}/metadata.json`;
+      const ipfsHash = r.replace('ipfs://', '');
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
     });
     const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
       urls.map(async (url) => {
