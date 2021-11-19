@@ -11,6 +11,15 @@ contract Articles is ERC1155Supply {
     mapping(uint256 => string) private _uris;
     mapping(uint256 => address) public creators;
 
+
+    event ArticleMinted(
+        address indexed creator,
+        string indexed uri,
+        uint256 indexed id,
+        uint256 initialSupply
+    );
+
+
     constructor() ERC1155("Articles") {}
 
     function uri(uint256 tokenId) public view override returns (string memory) {
@@ -34,6 +43,7 @@ contract Articles is ERC1155Supply {
         _uris[lastId.current()] = _uri;
         creators[lastId.current()] = msg.sender;
         _mint(msg.sender, lastId.current(), _initialSupply, "");
+        emit ArticleMinted(msg.sender, _uri, lastId.current(), _initialSupply);
         lastId.increment();
     }
 
