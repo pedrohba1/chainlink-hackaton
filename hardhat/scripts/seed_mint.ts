@@ -59,7 +59,12 @@ async function main() {
   console.log("latestId", lastId.toString());
 
   // mint a few NFTs:
-  articles.create("10", uris[7].url);
+  const promisesToAwait: Promise<any>[] = [];
+  uris.forEach((uri) => {
+    promisesToAwait.push(articles.create("10", uri.url));
+  });
+  const responses = await Promise.all(promisesToAwait);
+  console.log(responses);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
