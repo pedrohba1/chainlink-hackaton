@@ -6,7 +6,7 @@ const client = new NFTStorage({ token: apiKey });
 
 async function storeImage() {
   const content = await fs.readFile(
-    path.resolve(__dirname, "../images/sample.png")
+    path.resolve(__dirname, "../images/owl_articles.png.png")
   );
 
   const metadata = await client.store({
@@ -26,19 +26,3 @@ async function main() {
 main();
 
 // feito o deploy do URI
-// ipfs://bafyreicfzjkprrcv7uvogrj72tfspdeylb3axd6rxkssvbshllyc64xkni/metadata.json
-// ipfs://bafyreibw75mqtwztq52fnbvdmsf2dvpw5g2jwyg47wl3n3e6zz5nk46dkm/metadata.json
-
-async function deployToIPFS(req) {
-  try {
-    const { name, description, image } = req;
-    const metadata = await client.store({
-      name,
-      description,
-      image,
-    });
-    return metadata.url;
-  } catch (e) {
-    return e;
-  }
-}
