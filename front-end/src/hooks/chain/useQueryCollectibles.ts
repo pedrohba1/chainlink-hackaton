@@ -42,7 +42,6 @@ export default function useQueryCollectibles() {
       uris.push(uri);
     }
     let urls = await Promise.all(uris);
-    console.log(urls);
 
     urls = urls.map((r: string) => {
       const ipfsHash = r.replace('ipfs://', '');
@@ -69,8 +68,6 @@ export default function useQueryCollectibles() {
 
         return rp.value;
       });
-
-    console.log(nfts);
 
     return { nfts };
   };

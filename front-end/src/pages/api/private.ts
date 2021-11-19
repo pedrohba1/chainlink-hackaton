@@ -5,7 +5,6 @@ export default async function mint(req, res) {
     try {
       const { message, signed } = req.body;
       const result = ethers.utils.verifyMessage(message, signed);
-      console.log(result);
       res.status(200).json({ signer: result });
     } catch (e) {
       res.status(400).json(e);

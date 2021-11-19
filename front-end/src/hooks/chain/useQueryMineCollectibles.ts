@@ -91,7 +91,6 @@ export default function useQueryMineCollectibles() {
       })
       .filter((item) => item !== null && item.balance !== '0');
 
-    console.log(nfts);
     return { nfts };
   };
 
