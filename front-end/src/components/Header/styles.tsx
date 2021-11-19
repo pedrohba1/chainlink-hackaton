@@ -6,6 +6,9 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
       justifyContent: 'space-between'
     },
+    appbar: {
+      background: '#fff'
+    },
     menuButton: {
       marginRight: theme.spacing(2)
     },
@@ -13,7 +16,15 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1
     },
     buttons: {
-      flex: 1
+      flex: 1,
+      color: '#173457'
+    },
+    imageIcon: {
+      height: '40px',
+      width: 'auto'
+    },
+    iconRoot: {
+      textAlign: 'center'
     }
   })
 );

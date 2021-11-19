@@ -1,10 +1,10 @@
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 import { useRouter } from 'next/router';
+import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 
 export default function Header() {
@@ -35,33 +35,56 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.appbar} position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Open articles!
-          </Typography>
-
-          <Typography variant="h6" className={classes.buttons}>
-            <Button onClick={() => router.push('/mint')} color="inherit">
-              mint article
-            </Button>
-            <Button onClick={() => router.push('/')} color="inherit">
-              view all
-            </Button>
-            <Button onClick={() => router.push('/mine')} color="inherit">
-              my articles
-            </Button>
-          </Typography>
-
-          <Button
-            disabled={isAuthenticating}
-            onClick={handleAuth}
-            color="inherit"
+          <Grid
+            justify="space-between" // Add it here :)
+            container
           >
-            {!isWeb3Enabled || !isAuthenticated
-              ? 'login with METAMASK'
-              : 'Logout'}
-          </Button>
+            <Grid item>
+              <img
+                className={classes.imageIcon}
+                src="/owl_logo.png"
+                alt="logo"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                className={classes.buttons}
+                onClick={() => router.push('/mint')}
+                color="inherit"
+              >
+                mint article
+              </Button>
+              <Button
+                className={classes.buttons}
+                onClick={() => router.push('/')}
+                color="inherit"
+              >
+                view all
+              </Button>
+              <Button
+                className={classes.buttons}
+                onClick={() => router.push('/mine')}
+                color="inherit"
+              >
+                my articles
+              </Button>
+            </Grid>
+
+            <Grid item>
+              <Button
+                className={classes.buttons}
+                disabled={isAuthenticating}
+                onClick={handleAuth}
+                color="inherit"
+              >
+                {!isWeb3Enabled || !isAuthenticated
+                  ? 'login with METAMASK'
+                  : 'Logout'}
+              </Button>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     </div>
