@@ -14,7 +14,7 @@ contract Articles is ERC1155Supply {
 
     event ArticleMinted(
         address indexed creator,
-        string indexed uri,
+        string  uri,
         uint256 indexed id,
         uint256 initialSupply
     );
