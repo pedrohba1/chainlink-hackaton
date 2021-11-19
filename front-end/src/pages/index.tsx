@@ -1,11 +1,12 @@
 import useQueryCollectibles from '@hooks/chain/useQueryCollectibles';
 import ImgMediaCard from '@components/Card';
 import { Container, Grid } from '@material-ui/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMoralis } from 'react-moralis';
 
 export default function Home() {
-  const { data, isLoading } = useQueryCollectibles();
+  const [page, setPage] = useState(0);
+  const { data, isLoading } = useQueryCollectibles(page);
   const { Moralis } = useMoralis();
 
   const checkChain = async () => {

@@ -1,76 +1,51 @@
 import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
-import Articles from 'src/contracts/Articles.json';
 import axiosInstance from '@api/axios';
-
-interface NftType {
-  name: string;
-  description: string;
-  image: string;
-}
 
 interface PromiseFulfilledResult<T> {
   status: 'fulfilled';
   value: T;
 }
 
-export default function useQueryCollectibles() {
+export default function useQueryCollectibles(queryPage) {
   const { Moralis } = useMoralis();
   (Moralis as any).enableWeb3();
-  const { abi } = Articles;
 
-  const query = async () => {
-    const options = {
-      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MUMBAI,
-      abi
-    };
+  const query = async (page) => {
+    const art = Moralis.Object.extend('ArticlesMinted');
+    const aQuery = new Moralis.Query(art);
+    const results = await aQuery.limit(9).skip(page).find();
 
-    const lastId = await Moralis.Web3.executeFunction({
-      ...options,
-      functionName: 'getLatestId'
-    });
-
-    const uris = [];
-    for (let i = 0; i < lastId; i += 1) {
-      const uri = Moralis.Web3.executeFunction({
-        ...options,
-        functionName: 'uri',
-        params: {
-          tokenId: String(i)
-        }
-      });
-      uris.push(uri);
-    }
-    let urls = await Promise.all(uris);
-
-    urls = urls.map((r: string) => {
-      const ipfsHash = r.replace('ipfs://', '');
-      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
-    });
-    const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
-      urls.map(async (url) => {
-        const resp = await axiosInstance.get(url);
-        return resp.data;
+    const parsedResults = await Promise.allSettled<Promise<any>[]>(
+      results.map(async (result) => {
+        const uri = `https://gateway.ipfs.io/ipfs/${result.attributes.uri.replace(
+          'ipfs://',
+          ''
+        )}`;
+        const resp = await axiosInstance.get(uri);
+        return {
+          ...result.attributes,
+          ...resp.data,
+          image: `https://gateway.ipfs.io/ipfs/${resp.data.image.replace(
+            'ipfs://',
+            ''
+          )}`
+        };
       })
     );
-    const nfts = resolvedPromises
+
+    const nfts = parsedResults
       .filter(({ status }) => status === 'fulfilled')
       .map((p) => {
-        const rp = p as PromiseFulfilledResult<NftType>;
+        const rp = p as PromiseFulfilledResult<any>;
         if (rp.value !== undefined) {
-          const {
-            value: { image }
-          } = rp;
-          const imgIpfsHash = image.replace('ipfs://', '');
-          rp.value.image = `https://gateway.ipfs.io/ipfs/${imgIpfsHash}`;
-          return rp.value as NftType;
+          return rp.value;
         }
-
         return rp.value;
       });
 
     return { nfts };
   };
 
-  return useQuery(['get/collectibles'], () => query());
+  return useQuery(['get/collectibles', queryPage], () => query(queryPage));
 }

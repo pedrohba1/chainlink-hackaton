@@ -12,7 +12,7 @@ export default function Header() {
   const router = useRouter();
 
   const {
-    enableWeb3,
+    Moralis,
     isWeb3Enabled,
     authenticate,
     isAuthenticated,
@@ -21,12 +21,12 @@ export default function Header() {
   } = useMoralis();
 
   useEffect(() => {
-    if (isAuthenticated) enableWeb3();
+    if (isAuthenticated) (Moralis as any).enableWeb3();
   }, [isAuthenticated]);
 
   async function handleAuth() {
     if (!isWeb3Enabled || !isAuthenticated) {
-      enableWeb3();
+      (Moralis as any).enableWeb3();
       await authenticate();
     } else {
       logout();
