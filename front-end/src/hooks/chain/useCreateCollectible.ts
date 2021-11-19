@@ -8,7 +8,7 @@ export default function useCreateCollectible() {
   const { Moralis } = useMoralis();
   const { abi } = Articles;
   const options = {
-    contractAddress: '0x415C1b8122E913958003E6ab1A1c4b7A22472f9F',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MUMBAI,
     abi
   };
 
@@ -31,9 +31,9 @@ export default function useCreateCollectible() {
 
       await Moralis.Web3.executeFunction({
         ...options,
-        functionName: 'createCollectible',
+        functionName: 'create',
         params: {
-          amount: '10',
+          _initialSupply: '10',
           _uri: jsonIpfsLink
         }
       });

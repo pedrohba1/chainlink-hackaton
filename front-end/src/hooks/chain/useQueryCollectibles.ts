@@ -65,9 +65,11 @@ export default function useQueryCollectibles() {
           rp.value.image = `https://gateway.ipfs.io/ipfs/${imgIpfsHash}`;
           return rp.value as NftType;
         }
-        return null;
-      })
-      .filter((item) => item !== null);
+
+        return rp.value;
+      });
+
+    console.log(nfts);
 
     return { nfts };
   };
