@@ -21,13 +21,13 @@ export default function useQueryCollectibles() {
 
   const query = async () => {
     const options = {
-      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MUMBAI,
       abi
     };
 
     const lastId = await Moralis.Web3.executeFunction({
       ...options,
-      functionName: 'lastId'
+      functionName: 'getLatestId'
     });
 
     const uris = [];
@@ -45,7 +45,7 @@ export default function useQueryCollectibles() {
     let urls = await Promise.all(uris);
     urls = urls.map((r: string) => {
       const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
-      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}/metadata.json`;
     });
     const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
       urls.map(async (url) => {
