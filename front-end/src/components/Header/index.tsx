@@ -70,6 +70,13 @@ export default function Header() {
               >
                 my articles
               </Button>
+              <Button
+                className={classes.buttons}
+                onClick={() => router.push('/market')}
+                color="inherit"
+              >
+                market
+              </Button>
             </Grid>
 
             <Grid item>
