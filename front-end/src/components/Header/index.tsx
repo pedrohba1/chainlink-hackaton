@@ -11,22 +11,15 @@ export default function Header() {
   const classes = useStyles();
   const router = useRouter();
 
-  const {
-    Moralis,
-    isWeb3Enabled,
-    authenticate,
-    isAuthenticated,
-    logout,
-    isAuthenticating
-  } = useMoralis();
+  const { Moralis, authenticate, isAuthenticated, isAuthenticating, logout } =
+    useMoralis();
 
   useEffect(() => {
     if (isAuthenticated) (Moralis as any).enableWeb3();
   }, [isAuthenticated]);
 
   async function handleAuth() {
-    if (!isWeb3Enabled || !isAuthenticated) {
-      (Moralis as any).enableWeb3();
+    if (!isAuthenticated) {
       await authenticate();
     } else {
       logout();
@@ -86,9 +79,7 @@ export default function Header() {
                 onClick={handleAuth}
                 color="inherit"
               >
-                {!isWeb3Enabled || !isAuthenticated
-                  ? 'login with METAMASK'
-                  : 'Logout'}
+                {!isAuthenticated ? ' login with METAMASK' : ' Logout'}
               </Button>
             </Grid>
           </Grid>

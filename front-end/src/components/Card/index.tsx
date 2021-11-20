@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     maxWidth: 345
   },
   content: {
-    height: 100,
+    height: 200,
     overflow: 'hidden'
   }
 });
@@ -26,7 +26,7 @@ export default function ImgMediaCard({ name, description, image }) {
         <CardMedia
           component="img"
           alt="Article NFT Image"
-          height="140"
+          height="200"
           width="500"
           image={image}
           title="Contemplative Reptile"
