@@ -24,7 +24,7 @@ export default function Home() {
     <Container>
       <Grid
         container
-        spacing={2}
+        spacing={4}
         direction="row"
         justify="flex-start"
         alignItems="flex-start"
