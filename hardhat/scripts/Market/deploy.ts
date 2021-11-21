@@ -4,10 +4,10 @@ async function main() {
   const [owner] = await ethers.getSigners();
   const balance = await owner.getBalance();
   console.log(balance.toString());
-  const Articles = await ethers.getContractFactory("Articles");
-  const articles = await Articles.deploy();
-  await articles.deployed();
-  console.log("Articles deployed to:", articles.address);
+  const NFTMarket = await ethers.getContractFactory("NFTMarket");
+  const market = await NFTMarket.deploy();
+  await market.deployed();
+  console.log("NFTMarket deployed to:", market.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -17,4 +17,4 @@ main().catch((error) => {
   process.exitCode = 1;
 });
 
-// on mumbai 0x7B262522e042AA846cE7CD24d978ae35a02A3C4C
+// on mumbai 0xd822B99D59816Ba967a0CE56790147bfaBbAB7AC
