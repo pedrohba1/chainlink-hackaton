@@ -22,8 +22,6 @@ export default function useQueryMineCollectibles() {
   const query = async () => {
     const web3 = await (Moralis as any).enableWeb3();
     const [current] = await web3.eth.getAccounts();
-    console.log(current);
-
     const options = {
       contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MUMBAI,
       abi
