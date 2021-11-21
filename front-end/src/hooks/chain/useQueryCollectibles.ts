@@ -1,6 +1,12 @@
 import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
 
+type Nft = {
+  image: string;
+  description: string;
+  name: string;
+};
+
 export default function useQueryCollectibles(queryPage) {
   const { Moralis } = useMoralis();
   (Moralis as any).enableWeb3();
@@ -16,7 +22,7 @@ export default function useQueryCollectibles(queryPage) {
           'ipfs://',
           ''
         )}`
-      };
+      } as Nft;
     });
 
     return { nfts: parsedResults };
