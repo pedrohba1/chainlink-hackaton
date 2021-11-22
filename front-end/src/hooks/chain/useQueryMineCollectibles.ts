@@ -22,7 +22,6 @@ export default function useQueryMineCollectibles() {
   const query = async () => {
     const web3 = await (Moralis as any).enableWeb3();
     const [current] = await web3.eth.getAccounts();
-
     const options = {
       contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MUMBAI,
       abi
@@ -64,8 +63,8 @@ export default function useQueryMineCollectibles() {
 
     let urls = await Promise.all(uris);
     urls = urls.map((r: string) => {
-      const ipfsHash = r.replace('ipfs://', '').replace('/metadata.json', '');
-      return `https://gateway.ipfs.io/ipfs/${ipfsHash}/metadata.json`;
+      const ipfsHash = r.replace('ipfs://', '');
+      return `https://gateway.ipfs.io/ipfs/${ipfsHash}`;
     });
     const resolvedPromises = await Promise.allSettled<Promise<any>[]>(
       urls.map(async (url) => {

@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
 import { useMoralis } from 'react-moralis';
-import axiosInstance from '@api/axios';
 
-interface PromiseFulfilledResult<T> {
-  status: 'fulfilled';
-  value: T;
-}
+type Nft = {
+  image: string;
+  description: string;
+  name: string;
+};
 
 export default function useQueryCollectibles(queryPage) {
   const { Moralis } = useMoralis();
@@ -15,36 +15,17 @@ export default function useQueryCollectibles(queryPage) {
     const art = Moralis.Object.extend('ArticlesMinted');
     const aQuery = new Moralis.Query(art);
     const results = await aQuery.limit(9).skip(page).find();
-
-    const parsedResults = await Promise.allSettled<Promise<any>[]>(
-      results.map(async (result) => {
-        const uri = `https://gateway.ipfs.io/ipfs/${result.attributes.uri.replace(
+    const parsedResults = results.map((result) => {
+      return {
+        ...result.attributes,
+        image: `https://gateway.ipfs.io/ipfs/${result.attributes.image.replace(
           'ipfs://',
           ''
-        )}`;
-        const resp = await axiosInstance.get(uri);
-        return {
-          ...result.attributes,
-          ...resp.data,
-          image: `https://gateway.ipfs.io/ipfs/${resp.data.image.replace(
-            'ipfs://',
-            ''
-          )}`
-        };
-      })
-    );
+        )}`
+      } as Nft;
+    });
 
-    const nfts = parsedResults
-      .filter(({ status }) => status === 'fulfilled')
-      .map((p) => {
-        const rp = p as PromiseFulfilledResult<any>;
-        if (rp.value !== undefined) {
-          return rp.value;
-        }
-        return rp.value;
-      });
-
-    return { nfts };
+    return { nfts: parsedResults };
   };
 
   return useQuery(['get/collectibles', queryPage], () => query(queryPage));

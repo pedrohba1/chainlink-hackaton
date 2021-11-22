@@ -18,9 +18,10 @@ const useStyles = makeStyles({
 
 export default function OwnedCard({ name, description, image, balance }) {
   const classes = useStyles();
-  const { web3 } = useMoralis();
+  const { Moralis } = useMoralis();
 
   const signAndRequest = async () => {
+    const web3 = await (Moralis as any).enableWeb3();
     const [current] = await web3.eth.getAccounts();
     const message = 'Message to request restricted data';
     const signed = await web3.eth.personal.sign(message, current, '');
